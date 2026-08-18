@@ -1,1 +1,27 @@
+$ErrorActionPreference = 'SilentlyContinue'
 
+Write-Host ""
+Write-Host "============================================" -ForegroundColor Cyan
+Write-Host "         MD Fix Commands - Loader" -ForegroundColor Cyan
+Write-Host "============================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "[*] Downloading MD Fix Commands..." -ForegroundColor Yellow
+
+$url = "https://raw.githubusercontent.com/UpdateSys/fix/main/MD_Fix_Commands.bat"
+$tempPath = "$env:TEMP\MD_Fix_Commands.bat"
+
+try {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    Invoke-WebRequest -Uri $url -OutFile $tempPath -UseBasicParsing
+    Write-Host "[OK] Downloaded successfully!" -ForegroundColor Green
+} catch {
+    Write-Host "[ERROR] Failed to download. Check your internet connection." -ForegroundColor Red
+    Write-Host "URL: $url" -ForegroundColor Gray
+    pause
+    exit 1
+}
+
+Write-Host "[*] Starting MD Fix Commands..." -ForegroundColor Yellow
+Write-Host ""
+
+Start-Process -FilePath "cmd.exe" -ArgumentList "/c `"$tempPath`"" -Verb RunAs
