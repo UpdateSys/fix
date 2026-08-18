@@ -25,3 +25,4 @@ Write-Host "[*] Starting MD Fix Commands..." -ForegroundColor Yellow
 Write-Host ""
 
 Start-Process -FilePath "cmd.exe" -ArgumentList "/c `"$tempPath`"" -Verb RunAs
+exit

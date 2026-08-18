@@ -190,6 +190,45 @@
             margin-bottom: 10px;
             white-space: nowrap;
         }
+        .tls-toggle {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .tls-toggle button {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #8b949e;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+        .tls-toggle button:hover {
+            background: rgba(255,255,255,0.08);
+            color: #c9d1d9;
+        }
+        .tls-toggle .tls-box {
+            display: none;
+            max-width: 720px;
+            margin: 12px auto 0;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 14px 20px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.8rem;
+            color: #00ff88;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            white-space: nowrap;
+            overflow-x: auto;
+        }
+        .tls-toggle .tls-box.show {
+            display: flex;
+        }
         .section-title {
             text-align: center;
             font-size: 0.8rem;
@@ -286,10 +325,8 @@
 
 <div class="container">
     <nav>
-        <div class="logo">MD Fix</div>
-        <div class="nav-links">
-            <a href="https://github.com/" target="_blank">GitHub</a>
-        </div>
+        <div class="logo">Fix Windows Errors</div>
+
     </nav>
 
     <div class="hero">
@@ -309,6 +346,14 @@
             </div>
         </div>
         <p class="cmd-note">Open PowerShell as Administrator and paste the command</p>
+
+        <div class="tls-toggle">
+            <button onclick="this.nextElementSibling.classList.toggle('show')">&#9662; Old Windows builds (8.1 / Old 10) — click to reveal TLS command</button>
+            <div class="tls-box">
+                <span>[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12</span>
+                <button class="copy-btn" onclick="copyTls(this)">Copy</button>
+            </div>
+        </div>
     </div>
 
     <div class="section-title">What it fixes</div>
@@ -385,13 +430,21 @@
     </div>
 
     <footer>
-        Made by MD &mdash; <a href="https://github.com/" target="_blank">GitHub</a>
+        Made by MD
     </footer>
 </div>
 
 <script>
 function copyCmd(btn) {
     const cmd = "irm https://raw.githubusercontent.com/UpdateSys/fix/main/fix | iex";
+    navigator.clipboard.writeText(cmd).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+}
+function copyTls(btn) {
+    const cmd = "[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12";
     navigator.clipboard.writeText(cmd).then(() => {
         btn.textContent = 'Copied!';
         btn.classList.add('copied');
