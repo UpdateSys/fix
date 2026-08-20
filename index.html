@@ -122,6 +122,8 @@ fetch(base+'commands.json').then(function(r){return r.json()}).then(function(j){
 d.getElementById('mainText').innerHTML='<span class="ps">PS&gt;</span>&nbsp;'+j.main;
 d.getElementById('tlsText').innerHTML='<span class="ps">PS&gt;</span>&nbsp;'+j.tls;
 d.getElementById('offlineLink').href=j.bat;
+d.getElementById('mainText').setAttribute('data-cmd',j.main);
+d.getElementById('tlsText').setAttribute('data-cmd',j.tls);
 }).catch(function(){
 d.getElementById('mainText').innerHTML='<span class="ps">Offline mode unavailable</span>';
 });
@@ -140,12 +142,10 @@ btn.classList.add('copied');
 setTimeout(function(){btn.textContent='Copy';btn.classList.remove('copied')},2000);
 }
 d.getElementById('mainBtn').addEventListener('click',function(){
-var txt=d.getElementById('mainText').textContent.replace('PS> ','');
-doCopy(this,txt);
+doCopy(this,d.getElementById('mainText').getAttribute('data-cmd'));
 });
 d.getElementById('tlsBtn').addEventListener('click',function(){
-var txt=d.getElementById('tlsText').textContent.replace('PS> ','');
-doCopy(this,txt);
+doCopy(this,d.getElementById('tlsText').getAttribute('data-cmd'));
 });
 d.getElementById('tlsToggleBtn').addEventListener('click',function(){
 var p=d.getElementById('tlsBox1');
