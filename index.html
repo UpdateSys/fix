@@ -1,422 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MD Fix Commands</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #050510;
-            color: #fff;
-            overflow-x: hidden;
-        }
-
-        .bg-grid {
-            position: fixed;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            z-index: 0;
-        }
-
-        .glow-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.15;
-            z-index: 0;
-            animation: float 8s ease-in-out infinite;
-        }
-        .glow-orb.a { width: 600px; height: 600px; background: #00ff88; top: -200px; right: -100px; }
-        .glow-orb.b { width: 500px; height: 500px; background: #0066ff; bottom: -150px; left: -100px; animation-delay: -4s; }
-        .glow-orb.c { width: 300px; height: 300px; background: #a855f7; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: -2s; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-30px); }
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 24px 0;
-        }
-        .logo {
-            font-size: 1.3rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #00ff88, #00ccff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .nav-links a {
-            color: #8b949e;
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-left: 24px;
-            transition: color 0.2s;
-        }
-        .nav-links a:hover { color: #fff; }
-
-        .hero {
-            text-align: center;
-            padding: 100px 0 60px;
-        }
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0,255,136,0.08);
-            border: 1px solid rgba(0,255,136,0.2);
-            border-radius: 100px;
-            padding: 8px 20px;
-            font-size: 0.8rem;
-            color: #00ff88;
-            margin-bottom: 30px;
-            animation: fadeUp 0.6s ease;
-        }
-        .badge .dot {
-            width: 6px; height: 6px;
-            background: #00ff88;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            animation: fadeUp 0.6s ease 0.1s both;
-        }
-        .hero h1 .gradient {
-            background: linear-gradient(135deg, #00ff88, #00ccff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero p {
-            color: #8b949e;
-            font-size: 1.15rem;
-            max-width: 500px;
-            margin: 0 auto 40px;
-            line-height: 1.6;
-            animation: fadeUp 0.6s ease 0.2s both;
-        }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .cmd-card {
-            background: rgba(22,27,34,0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(48,54,61,0.8);
-            border-radius: 16px;
-            padding: 8px;
-            max-width: 100%;
-            margin: 0 auto 20px;
-            animation: fadeUp 0.6s ease 0.3s both;
-        }
-        .cmd-top {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 14px;
-        }
-        .cmd-dot { width: 12px; height: 12px; border-radius: 50%; }
-        .cmd-dot.r { background: #ff5f57; }
-        .cmd-dot.y { background: #febc2e; }
-        .cmd-dot.g { background: #28c840; }
-        .cmd-body {
-            background: #0d1117;
-            border-radius: 10px;
-            padding: 18px 20px;
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 12px;
-        }
-        .cmd-text {
-            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-            font-size: 0.78rem;
-            color: #00ff88;
-            word-break: break-all;
-            flex: 1;
-        }
-        .cmd-text .ps { color: #8b949e; }
-        .copy-btn {
-            flex-shrink: 0;
-            background: rgba(0,255,136,0.1);
-            border: 1px solid rgba(0,255,136,0.2);
-            color: #00ff88;
-            padding: 8px 18px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.82rem;
-            font-weight: 600;
-            transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
-        }
-        .copy-btn:hover {
-            background: rgba(0,255,136,0.2);
-            border-color: rgba(0,255,136,0.4);
-        }
-        .copy-btn.copied {
-            background: rgba(0,255,136,0.15);
-            color: #fff;
-        }
-        .cmd-note {
-            text-align: center;
-            color: #484f58;
-            font-size: 0.82rem;
-            margin-bottom: 10px;
-            white-space: nowrap;
-        }
-        .tls-toggle {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        .tls-toggle button {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #8b949e;
-            padding: 8px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
-        }
-        .tls-toggle button:hover {
-            background: rgba(255,255,255,0.08);
-            color: #c9d1d9;
-        }
-        #tlsBox1 { display: none; }
-        #tlsBox1.show { display: block; }
-        .section-title {
-            text-align: center;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #484f58;
-            margin-bottom: 30px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 12px;
-            margin-bottom: 60px;
-        }
-
-        .card {
-            background: rgba(22,27,34,0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(48,54,61,0.5);
-            border-radius: 14px;
-            padding: 24px;
-            transition: all 0.3s;
-            cursor: default;
-        }
-        .card:hover {
-            border-color: rgba(0,255,136,0.3);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 40px rgba(0,255,136,0.05);
-        }
-        .card h3 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-        .card p {
-            color: #8b949e;
-            font-size: 0.82rem;
-            line-height: 1.5;
-        }
-
-        .os-row {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 80px;
-        }
-        .os-pill {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 100px;
-            padding: 8px 18px;
-            font-size: 0.82rem;
-            color: #8b949e;
-        }
-
-        footer {
-            border-top: 1px solid rgba(255,255,255,0.06);
-            padding: 30px 0;
-            text-align: center;
-            color: #484f58;
-            font-size: 0.82rem;
-        }
-        footer a { color: #58a6ff; text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MD Fix Commands</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#050510;color:#fff;overflow-x:hidden}
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;z-index:0}
+.glow-orb{position:fixed;border-radius:50%;filter:blur(120px);opacity:0.15;z-index:0;animation:float 8s ease-in-out infinite}
+.glow-orb.a{width:600px;height:600px;background:#00ff88;top:-200px;right:-100px}
+.glow-orb.b{width:500px;height:500px;background:#0066ff;bottom:-150px;left:-100px;animation-delay:-4s}
+.glow-orb.c{width:300px;height:300px;background:#a855f7;top:50%;left:50%;transform:translate(-50%,-50%);animation-delay:-2s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
+.container{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:0 24px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:24px 0}
+.hero{text-align:center;padding:100px 0 60px}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);border-radius:100px;padding:8px 20px;font-size:0.8rem;color:#00ff88;margin-bottom:30px;animation:fadeUp .6s ease}
+.badge .dot{width:6px;height:6px;background:#00ff88;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-size:clamp(2.5rem,6vw,4rem);font-weight:800;line-height:1.1;margin-bottom:20px;animation:fadeUp .6s ease .1s both}
+.hero h1 .gradient{background:linear-gradient(135deg,#00ff88,#00ccff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:#8b949e;font-size:1.15rem;max-width:500px;margin:0 auto 40px;line-height:1.6;animation:fadeUp .6s ease .2s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.cmd-card{background:rgba(22,27,34,0.8);backdrop-filter:blur(20px);border:1px solid rgba(48,54,61,0.8);border-radius:16px;padding:8px;max-width:100%;margin:0 auto 20px;animation:fadeUp .6s ease .3s both}
+.cmd-top{display:flex;align-items:center;gap:8px;padding:10px 14px}
+.cmd-dot{width:12px;height:12px;border-radius:50%}
+.cmd-dot.r{background:#ff5f57}
+.cmd-dot.y{background:#febc2e}
+.cmd-dot.g{background:#28c840}
+.cmd-body{background:#0d1117;border-radius:10px;padding:18px 20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.cmd-text{font-family:'Cascadia Code','Fira Code','Consolas',monospace;font-size:0.78rem;color:#00ff88;word-break:break-all;flex:1}
+.cmd-text .ps{color:#8b949e}
+.copy-btn{flex-shrink:0;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.2);color:#00ff88;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:0.82rem;font-weight:600;transition:all .2s;font-family:'Inter',sans-serif}
+.copy-btn:hover{background:rgba(0,255,136,0.2);border-color:rgba(0,255,136,0.4)}
+.copy-btn.copied{background:rgba(0,255,136,0.15);color:#fff}
+.cmd-note{text-align:center;color:#484f58;font-size:0.82rem;margin-bottom:10px}
+.tls-toggle{text-align:center;margin-bottom:60px}
+.tls-toggle button{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#8b949e;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:0.8rem;font-family:'Inter',sans-serif;transition:all .2s}
+.tls-toggle button:hover{background:rgba(255,255,255,0.08);color:#c9d1d9}
+#tlsBox1{display:none}
+#tlsBox1.show{display:block;margin:12px auto 0}
+.section-title{text-align:center;font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;color:#484f58;margin-bottom:30px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:60px}
+.card{background:rgba(22,27,34,0.6);backdrop-filter:blur(10px);border:1px solid rgba(48,54,61,0.5);border-radius:14px;padding:24px;transition:all .3s}
+.card:hover{border-color:rgba(0,255,136,0.3);transform:translateY(-3px);box-shadow:0 10px 40px rgba(0,255,136,0.05)}
+.card h3{font-size:0.95rem;font-weight:600;margin-bottom:6px}
+.card p{color:#8b949e;font-size:0.82rem;line-height:1.5}
+.os-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:80px}
+.os-pill{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:8px 18px;font-size:0.82rem;color:#8b949e}
+footer{border-top:1px solid rgba(255,255,255,0.06);padding:30px 0;text-align:center;color:#484f58;font-size:0.82rem}
+</style>
 </head>
 <body>
-
 <div class="bg-grid"></div>
 <div class="glow-orb a"></div>
 <div class="glow-orb b"></div>
 <div class="glow-orb c"></div>
-
 <div class="container">
-    <nav>
-        <div class="logo">Fix Windows Errors</div>
-
-    </nav>
-
-    <div class="hero">
-        <div class="badge"><span class="dot"></span> Works on all Windows versions</div>
-        <h1>Fix Windows<br><span class="gradient">Errors Instantly</span></h1>
-        <p>One command to repair system files, reset network, clean junk, and fix 15+ common Windows issues.</p>
-
-        <div class="cmd-card">
-            <div class="cmd-top">
-                <span class="cmd-dot r"></span>
-                <span class="cmd-dot y"></span>
-                <span class="cmd-dot g"></span>
-            </div>
-            <div class="cmd-body">
-                <span class="cmd-text"><span class="ps">PS&gt;</span>&nbsp; irm https://raw.githubusercontent.com/UpdateSys/fix/main/fix | iex</span>
-                <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
-            </div>
-        </div>
-        <p class="cmd-note">Open PowerShell as Administrator and paste the command</p>
-
-        <div class="tls-toggle">
-            <button onclick="document.getElementById('tlsBox1').classList.toggle('show')">&#9662; For CMD and PowerShell, on old and new Windows builds.</button>
-            <div id="tlsBox1">
-                <div class="cmd-card" style="animation:none;margin:12px auto 0;">
-                    <div class="cmd-top">
-                        <span class="cmd-dot r"></span>
-                        <span class="cmd-dot y"></span>
-                        <span class="cmd-dot g"></span>
-                    </div>
-                    <div class="cmd-body">
-                        <span class="cmd-text"><span class="ps">PS&gt;</span>&nbsp; powershell ... | IEX</span>
-                        <button class="copy-btn" onclick="copyTls(this)">Copy</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div style="text-align:center;margin-bottom:24px;">
-        <a href="https://raw.githubusercontent.com/UpdateSys/fix/main/MD_Fix_Commands.bat" target="_blank" class="os-pill" style="cursor:pointer;text-decoration:none;">Offline</a>
-    </div>
-
-    <div class="section-title">What it fixes</div>
-
-    <div class="grid">
-        <div class="card">
-            <h3>Windows Update</h3>
-            <p>Reset Update components, clear cache, and restart services</p>
-        </div>
-        <div class="card">
-            <h3>System Files</h3>
-            <p>Run SFC and DISM to repair corrupt system files</p>
-        </div>
-        <div class="card">
-            <h3>Network Reset</h3>
-            <p>Fix DNS, Winsock, TCP/IP and set Google DNS</p>
-        </div>
-        <div class="card">
-            <h3>Disk Cleanup</h3>
-            <p>Clean temp files, thumbnails, caches and recycle bin</p>
-        </div>
-        <div class="card">
-            <h3>Firewall</h3>
-            <p>Reset Windows Firewall to default configuration</p>
-        </div>
-        <div class="card">
-            <h3>USB Fix</h3>
-            <p>Restart USB services and fix detection issues</p>
-        </div>
-        <div class="card">
-            <h3>Windows Search</h3>
-            <p>Rebuild search index and fix indexing problems</p>
-        </div>
-        <div class="card">
-            <h3>Group Policy</h3>
-            <p>Reset Group Policy settings to factory defaults</p>
-        </div>
-        <div class="card">
-            <h3>BSOD Cleanup</h3>
-            <p>Clear crash dumps and minidump files</p>
-        </div>
-        <div class="card">
-            <h3>Windows Store</h3>
-            <p>Reset Store cache and re-register the app</p>
-        </div>
-        <div class="card">
-            <h3>Activation</h3>
-            <p>Restart Software Protection service and rearm</p>
-        </div>
-        <div class="card">
-            <h3>Explorer Fix</h3>
-            <p>Clear icon cache and restart Explorer</p>
-        </div>
-    </div>
-
-    <div class="os-row">
-        <span class="os-pill">Windows 7</span>
-        <span class="os-pill">Windows 8</span>
-        <span class="os-pill">Windows 8.1</span>
-        <span class="os-pill">Windows 10</span>
-        <span class="os-pill">Windows 11</span>
-    </div>
-
-    <footer>
-        Made by MD
-    </footer>
+<nav><div></div></nav>
+<div class="hero">
+<div class="badge"><span class="dot"></span> Works on all Windows versions</div>
+<h1>Fix Windows<br><span class="gradient">Errors Instantly</span></h1>
+<p>One command to repair system files, reset network, clean junk, and fix 15+ common Windows issues.</p>
+<div class="cmd-card">
+<div class="cmd-top"><span class="cmd-dot r"></span><span class="cmd-dot y"></span><span class="cmd-dot g"></span></div>
+<div class="cmd-body">
+<span class="cmd-text" id="mainText"><span class="ps">Loading...</span></span>
+<button class="copy-btn" id="mainBtn">Copy</button>
 </div>
-
+</div>
+<p class="cmd-note">Open PowerShell as Administrator and paste the command</p>
+<div class="tls-toggle">
+<button id="tlsToggleBtn">&#9662; For CMD and PowerShell, on old and new Windows builds.</button>
+<div id="tlsBox1">
+<div class="cmd-card" style="animation:none;margin:12px auto 0">
+<div class="cmd-top"><span class="cmd-dot r"></span><span class="cmd-dot y"></span><span class="cmd-dot g"></span></div>
+<div class="cmd-body">
+<span class="cmd-text" id="tlsText"><span class="ps">Loading...</span></span>
+<button class="copy-btn" id="tlsBtn">Copy</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div style="text-align:center;margin-bottom:24px">
+<a id="offlineLink" target="_blank" class="os-pill" style="cursor:pointer;text-decoration:none">Offline</a>
+</div>
+<div class="section-title">What it fixes</div>
+<div class="grid">
+<div class="card"><h3>Windows Update</h3><p>Reset Update components, clear cache, and restart services</p></div>
+<div class="card"><h3>System Files</h3><p>Run SFC and DISM to repair corrupt system files</p></div>
+<div class="card"><h3>Network Reset</h3><p>Fix DNS, Winsock, TCP/IP and set Google DNS</p></div>
+<div class="card"><h3>Disk Cleanup</h3><p>Clean temp files, thumbnails, caches and recycle bin</p></div>
+<div class="card"><h3>Firewall</h3><p>Reset Windows Firewall to default configuration</p></div>
+<div class="card"><h3>USB Fix</h3><p>Restart USB services and fix detection issues</p></div>
+<div class="card"><h3>Windows Search</h3><p>Rebuild search index and fix indexing problems</p></div>
+<div class="card"><h3>Group Policy</h3><p>Reset Group Policy settings to factory defaults</p></div>
+<div class="card"><h3>BSOD Cleanup</h3><p>Clear crash dumps and minidump files</p></div>
+<div class="card"><h3>Windows Store</h3><p>Reset Store cache and re-register the app</p></div>
+<div class="card"><h3>Activation</h3><p>Restart Software Protection service and rearm</p></div>
+<div class="card"><h3>Explorer Fix</h3><p>Clear icon cache and restart Explorer</p></div>
+</div>
+<div class="os-row">
+<span class="os-pill">Windows 7</span>
+<span class="os-pill">Windows 8</span>
+<span class="os-pill">Windows 8.1</span>
+<span class="os-pill">Windows 10</span>
+<span class="os-pill">Windows 11</span>
+</div>
+<footer>Made by MD</footer>
+</div>
 <script>
-function copyCmd(btn) {
-    const cmd = "irm https://raw.githubusercontent.com/UpdateSys/fix/main/fix | iex";
-    navigator.clipboard.writeText(cmd).then(() => {
-        btn.textContent = 'Copied!';
-        btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
-    });
+(function(){
+var d=document;
+var base='https://raw.githubusercontent.com/UpdateSys/fix/main/';
+function load(){
+fetch(base+'commands.json').then(function(r){return r.json()}).then(function(j){
+d.getElementById('mainText').innerHTML='<span class="ps">PS&gt;</span>&nbsp;'+j.main;
+d.getElementById('tlsText').innerHTML='<span class="ps">PS&gt;</span>&nbsp;'+j.tls;
+d.getElementById('offlineLink').href=j.bat;
+}).catch(function(){
+d.getElementById('mainText').innerHTML='<span class="ps">Offline mode unavailable</span>';
+});
 }
-function copyTls(btn) {
-    const cmd = 'powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12;(New-Object Net.WebClient).DownloadString(\'https://raw.githubusercontent.com/UpdateSys/fix/main/fix\') | IEX"';
-    navigator.clipboard.writeText(cmd).then(() => {
-        btn.textContent = 'Copied!';
-        btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
-    });
+load();
+function doCopy(btn,txt){
+var t=d.createElement('textarea');
+t.value=txt;
+t.style.cssText='position:fixed;opacity:0';
+d.body.appendChild(t);
+t.select();
+d.execCommand('copy');
+d.body.removeChild(t);
+btn.textContent='Copied!';
+btn.classList.add('copied');
+setTimeout(function(){btn.textContent='Copy';btn.classList.remove('copied')},2000);
 }
+d.getElementById('mainBtn').addEventListener('click',function(){
+var txt=d.getElementById('mainText').textContent.replace('PS> ','');
+doCopy(this,txt);
+});
+d.getElementById('tlsBtn').addEventListener('click',function(){
+var txt=d.getElementById('tlsText').textContent.replace('PS> ','');
+doCopy(this,txt);
+});
+d.getElementById('tlsToggleBtn').addEventListener('click',function(){
+var p=d.getElementById('tlsBox1');
+p.classList.toggle('show');
+this.textContent=p.classList.contains('show')?'\u25C4 For CMD and PowerShell, on old and new Windows builds.':'\u25BE For CMD and PowerShell, on old and new Windows builds.';
+});
+})();
 </script>
-
 </body>
 </html>

